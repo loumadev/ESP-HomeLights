@@ -85,19 +85,19 @@ void eventHandler(String data[10]) {
 }
 ```
 
-#### Events
+## Events
 First element (index 0) in data array is always event name!
 
-* Light change
+### Light change
 
 Event occurs when color, brightness or switching is done in Control Panel.
 
-**###### Name**
+#### Name
 ```
 light
 ```
 
-**###### Data**
+#### Data
 
 1. **Name of room**
 2. **Red channel**
@@ -106,16 +106,16 @@ light
 5. **Alpha channel** _`0` - Off_ _`1` - On_
 
 
-* Temperature mode change
+### Temperature mode change
 
 Event occurs when temperature mode is changed.
 
-**###### Name**
+#### Name
 ```
 temp
 ```
 
-**###### Data**
+#### Data
 
 1. **Name of room**
 2. **mode** _`-1` - None_ _`0` - Heating_ _`1` - Cooling_
