@@ -119,7 +119,10 @@ temp
 #### Data
 
 1. **Name of room**
-2. **mode** _`-1` - None_ _`0` - Heating_ _`1` - Cooling_
+2. **mode**
+   - _`-1` - None_
+   - _`0` - Heating_
+   - _`1` - Cooling_
 
 
 
