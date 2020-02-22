@@ -4,13 +4,13 @@ Lights and Temperature controller for Home using ESP8266
 
 ## Requirements
 
-To successfully get to work your ESP8266 you need to follow steps below.
 
 ### WebSockets
 
 This library is used to create and manage communication between server and client.
 
 To install this library go to `Sketch > Include Library > Add .ZIP Libraries` in your Arduino IDE and then select `arduinoWebSockets.zip` file from root folder of project.
+
 
 ### SPI Flash File System
 
@@ -22,6 +22,7 @@ To install this tool open explorer in Arduino folder. This is usually in
 ```
 Into this folder paste **uncompressed** `tools.zip` folder from root folder of project and restart Arduino IDE.
 Now you should have in `tools` menu `ESP8266 Sketch Data Upload` option.
+
 
 ## Installation
 
@@ -41,12 +42,16 @@ Bedroom;200;255;255
 ```
 
 _**NOTE:**_ Make sure there is no new line character `\n` at the end of the file. This can lead to unexpected behavior.
+
 _**NOTE:**_ This settings are default for first run and after changing values by Control Panel, they get overwritten!
+
 _**INFO:**_ Try to avoid using long names for room because of text owerflow in Control Panel.
+
 
 ### Flashing to SPIFFS
 
 Go to `Tools > Flash Size` and select `1M (64K SPIFFS)`. Then select `tools > ESP8266 Sketch Data Upload`.
+
 
 ### Uploading Sketch
 
@@ -58,6 +63,7 @@ Now is time to upload sketch.
 ### Control Panel
 
 To access Control Panel, make sure you are connect to same WiFi network as your ESP8266 Server (or you can use to port forwarding for accessing from differnt network; Server listens on *port 80*). ESP after connecting to WiFi network always prints out it's Local IP Address into Serial Port. In any web browser (Google Chrome preffered) just go to that IP Address and you are connected!
+
 
 ### Adjusting Commands
 
@@ -82,15 +88,15 @@ void eventHandler(String data[10]) {
 #### Events
 First element (index 0) in data array is always event name!
 
-##### Light change
+* Light change
 Event occurs when color, brightness or switching is done in Control Panel.
 
-###### Name
+**###### Name**
 ```
 light
 ```
 
-###### Data
+**###### Data**
 
 1. **Name of room**
 2. **Red channel**
@@ -99,15 +105,15 @@ light
 5. **Alpha channel** _`0` - Off_ _`1` - On_
 
 
-##### Temperature mode change
+* Temperature mode change
 Event occurs when temperature mode is changed.
 
-###### Name
+**###### Name**
 ```
 temp
 ```
 
-###### Data
+**###### Data**
 
 1. **Name of room**
 2. **mode** _`-1` - None_ _`0` - Heating_ _`1` - Cooling_
