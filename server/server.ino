@@ -1,3 +1,9 @@
+/**
+ * @name    Home Lights and Temperature control for ESP8266, controled using webapp
+ * @author  Jaroslav Louma
+ * @version 1.0.0
+ */
+
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <ESP8266WebServer.h>
@@ -5,17 +11,15 @@
 #include <ArduinoJson.h>
 #include <FS.h>
 
-const String ssid = "Cimbor";
-const String password = "karol1919";
+const String ssid = "ssid";                           //Wireless network name
+const String password = "password";                   //Wireless network password
 
-const String Path = "/data.txt";
-const int maxRooms = 10;
-const int Elms = 5;
-String Rooms[maxRooms][Elms];
+const String Path = "/data.txt";                      //Relative path to data file
+const int maxRooms = 10;                              //Max number of rooms
+const int Elms = 5;                                   //Number of data in single record
+String Rooms[maxRooms][Elms];                         //Rooms object
 
-String WebPage = "<!DOCTYPE html><html><style>input[type=\"text\"]{width: 90%; height: 3vh;}input[type=\"button\"]{width: 9%; height: 3.6vh;}.rxd{height: 90vh;}textarea{width: 99%; height: 100%; resize: none;}</style><script>var Socket;function start(){Socket=new WebSocket('ws://' + window.location.hostname + ':81/'); Socket.onmessage=function(evt){document.getElementById(\"rxConsole\").value +=evt.data;}}function enterpressed(){Socket.send(document.getElementById(\"txbuff\").value); document.getElementById(\"txbuff\").value=\"\";}</script><body onload=\"javascript:start();\"> <div><input class=\"txd\" type=\"text\" id=\"txbuff\" onkeydown=\"if(event.keyCode==13) enterpressed();\"><input class=\"txd\" type=\"button\" onclick=\"enterpressed();\" value=\"Send\" > </div><br><div class=\"rxd\"> <textarea id=\"rxConsole\" readonly></textarea> </div></body></html>";
-
-WebSocketsServer webSocket = WebSocketsServer(81);    //Setup WebSocket Server
+WebSocketsServer webSocket(81);                       //Setup WebSocket Server
 ESP8266WebServer server(80);                          //Setup HTTP Server
 
 
@@ -42,11 +46,10 @@ void setup() {
     //Setup HTTP Request Listener (Anonymous Callback)
     server.onNotFound([]() {
         Serial.print("\n" + server.client().remoteIP().toString() + " => " + server.uri());
-        //server.send(200, "text/html", WebPage);
-        sendFile("/client.html", "text/html");
+        sendFile("/client.html", "text/html");        //Send UI file
     });
 
-    SPIFFS.begin();
+    SPIFFS.begin();                                   //Start SPI Flash File System
     
     server.begin();                                   //Start HTTP Server
     
@@ -54,10 +57,10 @@ void setup() {
     webSocket.onEvent(webSocketEvent);                //Setup WebSocket Evenet Listener
 
 
-    if(SPIFFS.exists(Path)) {
-        loadRooms(Rooms);
+    if(SPIFFS.exists(Path)) {                         //Check if data file exists
+        loadRooms(Rooms);                             //Load data file
     } else {
-        writeFile(Path, "Room0;255;0;0;1");
+        writeFile(Path, "Room0;255;0;0;1");           //Create default data file
     }
 }
 
@@ -70,26 +73,29 @@ void loop() {
 /* Functions */
 
 void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t len) {
-    if(type == WStype_CONNECTED) {
-        String rooms = parseRooms(Rooms);
-        webSocket.sendTXT(0, rooms);
-    } else if(type == WStype_TEXT) {
+    if(type == WStype_CONNECTED) {            //On new connection
+        String rooms = parseRooms(Rooms);             //Parse room data as string
+        webSocket.sendTXT(0, rooms);                  //Send parsed data to client
+    } else if(type == WStype_TEXT) {          //On message
         String buff;
-        for(int i = 0; i < len; i++) buff += (char)payload[i];
+        for(int i = 0; i < len; i++) buff += (char)payload[i];    //Create String Buffer
 
         String data[10];
-        stringSplit(buff, ';', data, 10);
+        stringSplit(buff, ';', data, 10);             //Parse data
         
         String command = data[0];
 
+        /* Edit Here */
         if(command == "light") {
             String name = data[1];
             String rgb[4] = {data[2], data[3], data[4], data[5]};
             updateRoom(name, rgb);
             Serial.print("\nUpdate: " + name + " > rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + "," + rgb[3] + ")");
         } else if(command == "temp") {
-			      Serial.print("\nUpdate: " + data[1] + " > Temperature mode = " + data[2]);
+            String mode = data[2]; // -1 = none; 0 = heat; 1 = cool
+			      Serial.print("\nUpdate: " + data[1] + " > Temperature mode = " + mode);
 		    }
+        /* End of editing */
     }
 }
 
