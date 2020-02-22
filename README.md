@@ -104,8 +104,8 @@ light
 3. **Green channel**
 4. **Blue channel**
 5. **Alpha channel**
-  - _`0` - Off_
-  - _`1` - On_
+   - _`0` - Off_
+   - _`1` - On_
 
 ### Temperature mode change
 
