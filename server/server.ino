@@ -88,8 +88,8 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t len) {
             updateRoom(name, rgb);
             Serial.print("\nUpdate: " + name + " > rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + "," + rgb[3] + ")");
         } else if(command == "temp") {
-			Serial.print("\nUpdate: " + name + " > Temperature mode = " + data[2]);
-		}
+			      Serial.print("\nUpdate: " + data[1] + " > Temperature mode = " + data[2]);
+		    }
     }
 }
 
