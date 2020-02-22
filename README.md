@@ -55,7 +55,63 @@ Now is time to upload sketch.
 
 ## Controlling
 
+### Control Panel
+
 To access Control Panel, make sure you are connect to same WiFi network as your ESP8266 Server (or you can use to port forwarding for accessing from differnt network; Server listens on *port 80*). ESP after connecting to WiFi network always prints out it's Local IP Address into Serial Port. In any web browser (Google Chrome preffered) just go to that IP Address and you are connected!
+
+### Adjusting Commands
+
+You can add custom calls into `eventHandler` function.
+Default code prints out events and values:
+```
+void eventHandler(String data[10]) {
+    String command = data[0];
+    
+    if(command == "light") {
+        String name = data[1];    //Name of the room
+        String rgb[4] = {data[2], data[3], data[4], data[5]};
+        updateRoom(name, rgb);
+        Serial.print("\nUpdate: " + name + " > rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + "," + rgb[3] + ")");
+    } else if(command == "temp") {
+        String mode = data[2];   //Temperature mode
+        Serial.print("\nUpdate: " + data[1] + " > Temperature mode = " + mode);
+    }
+}
+```
+
+#### Events
+First element (index 0) in data array is always event name!
+
+##### Light change
+Event occurs when color, brightness or switching is done in Control Panel.
+
+###### Name
+```
+light
+```
+
+###### Data
+
+1. **Name of room**
+2. **Red channel**
+3. **Green channel**
+4. **Blue channel**
+5. **Alpha channel** _`0` - Off_ _`1` - On_
+
+
+##### Temperature mode change
+Event occurs when temperature mode is changed.
+
+###### Name
+```
+temp
+```
+
+###### Data
+
+1. **Name of room**
+2. **mode** _`-1` - None_ _`0` - Heating_ _`1` - Cooling_
+
 
 
 ## Authors

@@ -72,6 +72,20 @@ void loop() {
 
 /* Functions */
 
+void eventHandler(String data[10]) {
+    String command = data[0];
+    
+    if(command == "light") {
+        String name = data[1];  //Name of the room
+        String rgb[4] = {data[2], data[3], data[4], data[5]};
+        updateRoom(name, rgb);
+        Serial.print("\nUpdate: " + name + " > rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + "," + rgb[3] + ")");
+    } else if(command == "temp") {
+        String mode = data[2]; //Temperature mode
+        Serial.print("\nUpdate: " + data[1] + " > Temperature mode = " + mode);
+    }
+}
+
 void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t len) {
     if(type == WStype_CONNECTED) {            //On new connection
         String rooms = parseRooms(Rooms);             //Parse room data as string
@@ -83,19 +97,7 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t len) {
         String data[10];
         stringSplit(buff, ';', data, 10);             //Parse data
         
-        String command = data[0];
-
-        /* Edit Here */
-        if(command == "light") {
-            String name = data[1];
-            String rgb[4] = {data[2], data[3], data[4], data[5]};
-            updateRoom(name, rgb);
-            Serial.print("\nUpdate: " + name + " > rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + "," + rgb[3] + ")");
-        } else if(command == "temp") {
-            String mode = data[2]; // -1 = none; 0 = heat; 1 = cool
-			      Serial.print("\nUpdate: " + data[1] + " > Temperature mode = " + mode);
-		    }
-        /* End of editing */
+        eventHandler(data);
     }
 }
 
