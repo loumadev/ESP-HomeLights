@@ -318,6 +318,7 @@
     };
 
     get("body").style.height = window.innerHeight + "px";
+    window.onresize = () => get("body").style.height = window.innerHeight + "px";
 
     function generateRooms(rooms) {
         var html = '';
@@ -432,6 +433,9 @@
         Main.elms.preview.style.backgroundColor = `hsl(${room.color.h}, ${100}%, ${50}%)`;
 
         Main.color = room.color;
+
+        room.temp.set(room.temp.current);
+        room.temp.setMode(room.temp.mode);
     }
 
     function toggle(index) {
