@@ -43,7 +43,7 @@ void setup() {
     server.onNotFound([]() {
         Serial.print("\n" + server.client().remoteIP().toString() + " => " + server.uri());
         //server.send(200, "text/html", WebPage);
-        sendFile("/UI.html", "text/html");
+        sendFile("/client.html", "text/html");
     });
 
     SPIFFS.begin();
@@ -82,12 +82,14 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t len) {
         
         String command = data[0];
 
-        if(command == "update") {
+        if(command == "light") {
             String name = data[1];
             String rgb[4] = {data[2], data[3], data[4], data[5]};
             updateRoom(name, rgb);
             Serial.print("\nUpdate: " + name + " > rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + "," + rgb[3] + ")");
-        }
+        } else if(command == "temp") {
+			Serial.print("\nUpdate: " + name + " > Temperature mode = " + data[2]);
+		}
     }
 }
 
