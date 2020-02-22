@@ -1,0 +1,63 @@
+# ESP8266 Smart Home Controller
+
+Lights and Temperature controller for Home using ESP8266
+
+## Requirements
+
+To successfully get to work your ESP8266 you need to follow steps below.
+
+### WebSockets
+
+This library is used to create and manage communication between server and client.
+
+To install this library go to `Sketch > Include Library > Add .ZIP Libraries` in your Arduino IDE and then select `arduinoWebSockets.zip` file from root folder of project.
+
+### SPI Flash File System
+
+Saving data is done by SPIFFS. To store data directly from your PC you must have istalled flashing tool.
+
+To install this tool open explorer in Arduino folder. This is usually in
+```
+<drive>:\Users\<username>\Documents\Arduino
+```
+Into this folder paste **uncompressed** `tools.zip` folder from root folder of project and restart Arduino IDE.
+Now you should have in `tools` menu `ESP8266 Sketch Data Upload` option.
+
+## Installation
+
+### Setup rooms
+
+You can create by default up to 10 rooms (Can be changed in `server.ino` > `maxRooms`).
+
+To manage these you have to point into `/server/data/data.txt`.
+Format is following:
+```
+Name_Of_Room;RED_VALUE;GREEN_VALUE;BLUE_VALUE
+```
+
+Example:
+```
+Bedroom;200;255;255
+```
+
+_**NOTE:**_ Make sure there is no new line character `\n` at the end of the file. This can lead to unexpected behavior.
+_**NOTE:**_ This settings are default for first run and after changing values by Control Panel, they get overwritten!
+_**INFO:**_ Try to avoid using long names for room because of text owerflow in Control Panel.
+
+### Flashing to SPIFFS
+
+Go to `Tools > Flash Size` and select `1M (64K SPIFFS)`. Then select `tools > ESP8266 Sketch Data Upload`.
+
+### Uploading Sketch
+
+Now is time to upload sketch.
+
+
+## Controlling
+
+To access Control Panel, make sure you are connect to same WiFi network as your ESP8266 Server (or you can use to port forwarding for accessing from differnt network; Server listens on *port 80*). ESP after connecting to WiFi network always prints out it's Local IP Address into Serial Port. In any web browser (Google Chrome preffered) just go to that IP Address and you are connected!
+
+
+## Authors
+
+* **Jaroslav Louma** - [@jaroslav.louma](https://www.instagram.com/jaroslav.louma/)
