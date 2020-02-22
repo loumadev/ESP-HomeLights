@@ -287,6 +287,7 @@
                 toggleClass(get('.heat'), "toggled", !mode);
                 toggleClass(get('.cool'), "toggled", mode);
             }
+            socket.send(`temp;${Rooms[this.index].name};${mode}`);
         }
         toggle(mode) {
             if (this.mode == mode) this.setMode(-1);
@@ -294,7 +295,7 @@
         }
     }
 
-    var Main = {
+    const Main = {
         color: {
             h: 0,
             s: 100,
@@ -310,7 +311,7 @@
         elm: get('aside article')
     };
 
-    var Rooms = [];
+    const Rooms = [];
     Rooms.selected = null;
     Rooms.get = function(index) {
         get(`[name=${Rooms[index].name}]`);
@@ -401,7 +402,7 @@
             Rooms.selected.color = hsl;
             Rooms.selected.elms.inner.style.backgroundColor = c.toString();
 
-            newUpdate = `update;${Rooms.selected.name};${~~c.r};${~~c.g};${~~c.b};${+Rooms.selected.toggled}`;
+            newUpdate = `light;${Rooms.selected.name};${~~c.r};${~~c.g};${~~c.b};${+Rooms.selected.toggled}`;
         } else {
             var room = Rooms[isDown];
 
@@ -411,7 +412,7 @@
             room.elms.inner.style.backgroundColor = rgb.toString();
             room.elms.inner.style.setProperty('--per', p * 100 + '%');
 
-            newUpdate = `update;${room.name};${~~rgb.r};${~~rgb.g};${~~rgb.b};${+room.toggled}`;
+            newUpdate = `light;${room.name};${~~rgb.r};${~~rgb.g};${~~rgb.b};${+room.toggled}`;
         }
     }
 
@@ -441,7 +442,7 @@
         toggleClass(room.elms.inner, 'off');
 
         var rgb = hsl2rgb(room.color.h, room.color.s, room.color.l);
-        newUpdate = `update;${room.name};${~~rgb.r};${~~rgb.g};${~~rgb.b};${+room.toggled}`;
+        newUpdate = `light;${room.name};${~~rgb.r};${~~rgb.g};${~~rgb.b};${+room.toggled}`;
     }
 
     function hsl2rgb(h, s, l) {
@@ -482,7 +483,7 @@
         newUpdate = lastUpdate;
     }, 100);
 
-    var socket = new WebSocket('ws://' + window.location.hostname + ':81/');
+    const socket = new WebSocket('ws://' + window.location.hostname + ':81/');
     socket.onmessage = function(e) {
         var rooms = e.data.split("\n");
 
