@@ -89,6 +89,7 @@ void eventHandler(String data[10]) {
 First element (index 0) in data array is always event name!
 
 * Light change
+
 Event occurs when color, brightness or switching is done in Control Panel.
 
 **###### Name**
@@ -106,6 +107,7 @@ light
 
 
 * Temperature mode change
+
 Event occurs when temperature mode is changed.
 
 **###### Name**
