@@ -54,7 +54,7 @@ void setup() {
     server.begin();                                   //Start HTTP Server
     
     webSocket.begin();                                //Start WebSocket Server
-    webSocket.onEvent(webSocketEvent);                //Setup WebSocket Evenet Listener
+    webSocket.onEvent(webSocketEvent);                //Setup WebSocket Event Listener
 
 
     if(SPIFFS.exists(Path)) {                         //Check if data file exists
