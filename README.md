@@ -53,6 +53,11 @@ _**INFO:**_ Try to avoid using long names for room because of text owerflow in C
 Go to `Tools > Flash Size` and select `1M (64K SPIFFS)`. Then select `tools > ESP8266 Sketch Data Upload`.
 
 
+### Network Configuraton
+
+Change your SSID and Password in `Server.ino` at the top of the source code.
+
+
 ### Uploading Sketch
 
 Now is time to upload sketch.
